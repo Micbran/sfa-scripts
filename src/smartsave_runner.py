@@ -1,9 +1,9 @@
-from src.SceneFile.SceneFile import SceneFile
+from SceneFile.SceneFile import SceneFile
 
 
 def main():
     scene_file_test = SceneFile("D:/testfile_testing1_v001.ma")
-    print(scene_file_test.file_name, scene_file_test.path, sep="\n")
+    print(scene_file_test.file_name, scene_file_test.path)
 
 
 if __name__ == '__main__':
