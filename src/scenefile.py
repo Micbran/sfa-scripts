@@ -6,12 +6,18 @@ log = logging.getLogger(__name__)
 
 
 class SceneFile:
-    def __init__(self, path):
+    def __init__(self, path=None):
         self.folder_path = Path()
         self.descriptor = "DEFAULT"
         self.task = "DEFAULT"
         self.version = 0
-        self.extension = ".DEFAULT"
+        self.extension = ".ma"
+        scene = pmc.system.sceneName()
+        if not path and scene:
+            path = scene
+        elif not path and not scene:
+            log.warning("Unable to initialize SceneFile object from a new SceneFile. Specify a path.")
+            return
         self._init_from_path(Path(path))
 
     def _init_from_path(self, path):
@@ -37,6 +43,22 @@ class SceneFile:
             self.folder_path.makedirs_p()
             return pmc.system.saveAs(self.path)
 
+    def increment_save_file(self):
+        self.version = self._next_available_version()
+        return self.save_file()
 
+    def _next_available_version(self):
+        search_pattern = "{descriptor}_{task}_v*{extension}"\
+            .format(descriptor=self.descriptor, task=self.task, extension=self.extension)
+        matched_scenefiles = []
+        for file_path in self.folder_path.files():
+            if file_path.name.fnmatch(search_pattern):
+                matched_scenefiles.append(file_path)
+        if not matched_scenefiles:
+            return 1
+        matched_scenefiles.sort(reverse=True)
+        latest_scenefile = matched_scenefiles[0]
+        latest_version = int(latest_scenefile.name.stripext().split("_v")[-1])
+        return latest_version + 1
 
 

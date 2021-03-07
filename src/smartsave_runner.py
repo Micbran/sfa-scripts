@@ -1,9 +1,11 @@
-from src.SceneFile import SceneFile
-
-
 def main():
-    scene_file_test = SceneFile("D:/testfile_testing1_v001.ma")
-    print(scene_file_test.file_name, scene_file_test.path)
+    import scenefile
+    reload(scenefile)
+
+    scene_file = scenefile.SceneFile("D:\\sandbox\\test_folder\\test_folder_deeper\\mayatest_tankmdl_v001.ma")
+    print(scene_file.path)
+    print(scene_file.save_file())
+    print(scene_file.increment_save_file())
 
 
 if __name__ == '__main__':
