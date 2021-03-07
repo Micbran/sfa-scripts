@@ -1,4 +1,4 @@
-from SceneFile.SceneFile import SceneFile
+from src.SceneFile import SceneFile
 
 
 def main():

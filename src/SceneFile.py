@@ -1,4 +1,8 @@
+import logging
 from pymel.core.system import Path
+import pymel.core as pmc
+
+log = logging.getLogger(__name__)
 
 
 class SceneFile:
@@ -25,12 +29,14 @@ class SceneFile:
     def path(self):
         return self.folder_path / self.file_name
 
+    def save_file(self):
+        try:
+            return pmc.system.saveAs(self.path)
+        except RuntimeError as err:
+            log.warning("Missing directories in path, creating directories...")
+            self.folder_path.makedirs_p()
+            return pmc.system.saveAs(self.path)
 
-scene_file = SceneFile("D:/Programming/EighthSemester/Scripting/sfa-scripts/src/tankmodel_mayaintro_v001.ma")
-print(scene_file.folder_path)
-print(scene_file.descriptor)
-print(scene_file.task)
-print(scene_file.version)
-print(scene_file.extension)
-print(scene_file.file_name)
-print(scene_file.path)
+
+
+
