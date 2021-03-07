@@ -50,10 +50,12 @@ class SceneFile:
     def _next_available_version(self):
         search_pattern = "{descriptor}_{task}_v*{extension}"\
             .format(descriptor=self.descriptor, task=self.task, extension=self.extension)
+
         matched_scenefiles = []
         for file_path in self.folder_path.files():
             if file_path.name.fnmatch(search_pattern):
                 matched_scenefiles.append(file_path)
+
         if not matched_scenefiles:
             return 1
         matched_scenefiles.sort(reverse=True)
