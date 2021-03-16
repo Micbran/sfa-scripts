@@ -1,4 +1,4 @@
-import scenefile
+from src.smartsave import scenefile
 
 
 def main():
@@ -9,9 +9,6 @@ def main():
     print(scene_file.version)
     print(scene_file.extension)
     print(scene_file.file_name)
-    # print(scene_file.path)
-    # print(scene_file.save_file())
-    # print(scene_file.increment_save_file())
 
 
 if __name__ == '__main__':

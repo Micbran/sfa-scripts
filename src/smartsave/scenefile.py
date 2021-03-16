@@ -62,5 +62,3 @@ class SceneFile:
         latest_scenefile = matched_scenefiles[0]
         latest_version = int(latest_scenefile.name.stripext().split("_v")[-1])
         return latest_version + 1
-
-
