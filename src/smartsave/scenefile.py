@@ -1,13 +1,14 @@
 import logging
 from pymel.core.system import Path
 import pymel.core as pmc
+import maya.cmds as cmds
 
 log = logging.getLogger(__name__)
 
 
 class SceneFile:
 	def __init__(self, path=None):
-		self.folder_path = Path()
+		self.folder_path = Path(cmds.workspace(query=True, rootDirectory=True)) / "scenes"
 		self.descriptor = "DEFAULT"
 		self.task = "DEFAULT"
 		self.version = 0
@@ -16,7 +17,7 @@ class SceneFile:
 		if not path and scene:
 			path = scene
 		elif not path and not scene:
-			log.warning("Unable to initialize SceneFile object from a new SceneFile. Specify a path.")
+			log.info("Initialized SceneFile object with default properties.")
 			return
 		self._init_from_path(Path(path))
 

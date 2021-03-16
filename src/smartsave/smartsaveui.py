@@ -19,8 +19,9 @@ class SmartSaveUI(QtWidgets.QDialog):
 		self.setWindowTitle("SmartSave Tool")
 		self.setMinimumWidth(500)
 		self.setMaximumHeight(200)
-
 		self.setWindowFlags(self.windowFlags() ^ QtCore.Qt.WindowContextHelpButtonHint)
+
+		self.scenefile = SceneFile()
 		self._create_ui()
 		self._create_connections()
 
@@ -54,13 +55,12 @@ class SmartSaveUI(QtWidgets.QDialog):
 	def _create_file_input_ui(self):
 		file_input_layout = self._create_filename_headers()
 
-		self.descriptor_line_edit = QtWidgets.QLineEdit("main")
+		self.descriptor_line_edit = QtWidgets.QLineEdit(self.scenefile.descriptor)
 		self.descriptor_line_edit.setMinimumWidth(100)
-		self.task_line_edit = QtWidgets.QLineEdit("model")
+		self.task_line_edit = QtWidgets.QLineEdit(self.scenefile.task)
 		self.task_line_edit.setFixedWidth(50)
-		# self.version_spinbox = QtWidgets.QSpinBox()
 		self.version_spinbox = PaddedQSpinBox()
-		self.version_spinbox.setValue(1)
+		self.version_spinbox.setValue(self.scenefile.version)
 		self.version_spinbox.setFixedWidth(50)
 		self.version_spinbox.setButtonSymbols(QtWidgets.QAbstractSpinBox.PlusMinus)
 		self.version_spinbox.setMaximum(999)
@@ -69,7 +69,7 @@ class SmartSaveUI(QtWidgets.QDialog):
 		file_input_layout.addWidget(self.descriptor_line_edit, 1, 0)
 		file_input_layout.addWidget(QtWidgets.QLabel("_"), 1, 1)
 		file_input_layout.addWidget(self.task_line_edit, 1, 2)
-		file_input_layout.addWidget(QtWidgets.QLabel("_"), 1, 3)
+		file_input_layout.addWidget(QtWidgets.QLabel("_v"), 1, 3)
 		file_input_layout.addWidget(self.version_spinbox, 1, 4)
 		file_input_layout.addWidget(self.extension_label, 1, 5)
 		return file_input_layout
