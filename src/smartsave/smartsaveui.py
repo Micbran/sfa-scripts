@@ -5,6 +5,7 @@ from shiboken2 import wrapInstance
 from pymel.core.system import Path
 
 from scenefile import SceneFile
+from qtextensions import PaddedQSpinBox
 
 
 def return_maya_main_window():
@@ -21,10 +22,11 @@ class SmartSaveUI(QtWidgets.QDialog):
 
 		self.setWindowFlags(self.windowFlags() ^ QtCore.Qt.WindowContextHelpButtonHint)
 		self._create_ui()
+		self._create_connections()
 
 	def _create_ui(self):
 		self.main_layout = QtWidgets.QVBoxLayout()
-		self.first_row_layout = self._create_folder_ui()
+		self.folder_row_layout = self._create_folder_ui()
 		self.file_input_layout = self._create_file_input_ui()
 		self.button_layout = self._create_save_ui()
 
@@ -32,7 +34,7 @@ class SmartSaveUI(QtWidgets.QDialog):
 		self.title_label.setStyleSheet("font: bold 20px;")
 
 		self.main_layout.addWidget(self.title_label)
-		self.main_layout.addLayout(self.first_row_layout)
+		self.main_layout.addLayout(self.folder_row_layout)
 		self.main_layout.addLayout(self.file_input_layout)
 		self.main_layout.addStretch()
 		self.main_layout.addLayout(self.button_layout)
@@ -56,10 +58,12 @@ class SmartSaveUI(QtWidgets.QDialog):
 		self.descriptor_line_edit.setMinimumWidth(100)
 		self.task_line_edit = QtWidgets.QLineEdit("model")
 		self.task_line_edit.setFixedWidth(50)
-		self.version_spinbox = QtWidgets.QSpinBox()
+		# self.version_spinbox = QtWidgets.QSpinBox()
+		self.version_spinbox = PaddedQSpinBox()
 		self.version_spinbox.setValue(1)
 		self.version_spinbox.setFixedWidth(50)
 		self.version_spinbox.setButtonSymbols(QtWidgets.QAbstractSpinBox.PlusMinus)
+		self.version_spinbox.setMaximum(999)
 		self.extension_label = QtWidgets.QLabel(".ma")
 
 		file_input_layout.addWidget(self.descriptor_line_edit, 1, 0)
@@ -91,5 +95,30 @@ class SmartSaveUI(QtWidgets.QDialog):
 		button_layout.addWidget(self.save_increment_button)
 		return button_layout
 
+	def _create_connections(self):
+		self.folder_browse_button.clicked.connect(self._do_browse_dir)
+		self.save_button.clicked.connect(self._do_save)
+		self.save_increment_button.clicked.connect(self._do_increment_save)
 
+	@QtCore.Slot()
+	def _do_browse_dir(self):
+		directory = QtWidgets.QFileDialog.getExistingDirectory(
+			self, caption="Select Directory",
+			dir=self.folder_line_edit.text(),
+			options=QtWidgets.QFileDialog.ShowDirsOnly | QtWidgets.QFileDialog.DontResolveSymlinks)
+		self.folder_line_edit.setText(directory)
+
+	@QtCore.Slot()
+	def _do_save(self):
+		scene_file = self._create_scene_file_from_fields()
+		scene_file.save_file()
+
+	@QtCore.Slot()
+	def _do_increment_save(self):
+		scene_file = self._create_scene_file_from_fields()
+		scene_file.increment_save_file()
+
+	def _create_scene_file_from_fields(self):
+
+		return SceneFile()
 
