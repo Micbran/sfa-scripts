@@ -117,6 +117,7 @@ class SmartSaveUI(QtWidgets.QDialog):
 	def _do_increment_save(self):
 		self._update_scene_file_from_fields()
 		self.scenefile.increment_save_file()
+		self.version_spinbox.setValue(self.scenefile.version)
 
 	def _update_scene_file_from_fields(self):
 		self.scenefile.folder_path = str(self.folder_line_edit.text())
