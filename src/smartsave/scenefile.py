@@ -9,9 +9,9 @@ log = logging.getLogger(__name__)
 class SceneFile(object):
 	def __init__(self, path=None):
 		self._folder_path = Path(cmds.workspace(query=True, rootDirectory=True)) / "scenes"
-		self.descriptor = "DEFAULT"
-		self.task = "DEFAULT"
-		self.version = 0
+		self.descriptor = "main"
+		self.task = "model"
+		self.version = 1
 		self.extension = ".ma"
 		scene = pmc.system.sceneName()
 		if not path and scene:
