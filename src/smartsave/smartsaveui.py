@@ -110,15 +110,18 @@ class SmartSaveUI(QtWidgets.QDialog):
 
 	@QtCore.Slot()
 	def _do_save(self):
-		scene_file = self._create_scene_file_from_fields()
-		scene_file.save_file()
+		self._update_scene_file_from_fields()
+		self.scenefile.save_file()
 
 	@QtCore.Slot()
 	def _do_increment_save(self):
-		scene_file = self._create_scene_file_from_fields()
-		scene_file.increment_save_file()
+		self._update_scene_file_from_fields()
+		self.scenefile.increment_save_file()
 
-	def _create_scene_file_from_fields(self):
-
-		return SceneFile()
+	def _update_scene_file_from_fields(self):
+		self.scenefile.folder_path = str(self.folder_line_edit.text())
+		self.scenefile.descriptor = str(self.descriptor_line_edit.text())
+		self.scenefile.task = str(self.task_line_edit.text())
+		self.scenefile.extension = str(self.extension_label.text())
+		self.scenefile.version = int(self.version_spinbox.value())
 

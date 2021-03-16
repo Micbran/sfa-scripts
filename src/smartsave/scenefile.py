@@ -6,9 +6,9 @@ import maya.cmds as cmds
 log = logging.getLogger(__name__)
 
 
-class SceneFile:
+class SceneFile(object):
 	def __init__(self, path=None):
-		self.folder_path = Path(cmds.workspace(query=True, rootDirectory=True)) / "scenes"
+		self._folder_path = Path(cmds.workspace(query=True, rootDirectory=True)) / "scenes"
 		self.descriptor = "DEFAULT"
 		self.task = "DEFAULT"
 		self.version = 0
@@ -26,6 +26,14 @@ class SceneFile:
 		self.extension = path.ext
 		self.descriptor, self.task, version = path.name.stripext().split("_")
 		self.version = int(version[1:])
+
+	@property
+	def folder_path(self):
+		return self._folder_path
+
+	@folder_path.setter
+	def folder_path(self, value):
+		self._folder_path = Path(value)
 
 	@property
 	def file_name(self):
