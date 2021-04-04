@@ -1,11 +1,16 @@
 
 GUI:
-    * Allow user to select a polygon object (source object)
-    * Allow user to select a polygon object and/or vertices to scatter to (destination)
-    * Allow user to specify minimum and maximum random scale in x, y and z axes (1.0 - inf)
-        * Allow user to specify "square" scale, which scales each axis by the same random amount
-        * Allow user to specify min and max random scale for square scale
-    * Allow user to specify minimum and maximum rotation angle along x, y and z axes (0 - 360)
+    * Selection UI
+        * Allow user to select a polygon object (source object)
+        * Allow user to select a polygon object and/or vertices to scatter to (destination)
+    * Scale UI
+        * Individual Setting
+            * Allow user to specify minimum and maximum random scale in x, y and z axes (1.0 - inf)
+        * Square Setting
+            * Allow user to specify "square" scale, which scales each axis by the same random amount
+            * Allow user to specify min and max random scale for square scale
+    * Rotation UI
+        * Allow user to specify minimum and maximum rotation angle along x, y and z axes (0 - 360)
 
 Scatter:
     * Create instances (not copies) of the source object
