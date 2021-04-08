@@ -84,29 +84,37 @@ class ScatterToolUI(QtWidgets.QDialog):
         self.scale_square_label.setStyleSheet("font: bold;")
         self.scale_xyz_label = QtWidgets.QLabel("XYZ: ")
         self.scale_xyz_label.setStyleSheet("font: bold;")
-        
+
         self.dash_label = QtWidgets.QLabel("-")
 
-        self.scale_x_min = QtWidgets.QLineEdit()
+        self.scale_x_min = QtWidgets.QSpinBox(MIN_SCALE)
         self.scale_x_min.setMaximumWidth(50)
-        self.scale_x_max = QtWidgets.QLineEdit()
+        self.scale_x_min.setMinimum(1)
+        self.scale_x_max = QtWidgets.QSpinBox(MIN_SCALE)
         self.scale_x_max.setMaximumWidth(50)
+        self.scale_x_max.setMinimum(1)
 
-        self.scale_y_min = QtWidgets.QLineEdit()
+        self.scale_y_min = QtWidgets.QSpinBox(MIN_SCALE)
         self.scale_y_min.setMaximumWidth(50)
-        self.scale_y_max = QtWidgets.QLineEdit()
+        self.scale_y_min.setMinimum(1)
+        self.scale_y_max = QtWidgets.QSpinBox(MIN_SCALE)
         self.scale_y_max.setMaximumWidth(50)
+        self.scale_y_max.setMinimum(1)
 
-        self.scale_z_min = QtWidgets.QLineEdit()
+        self.scale_z_min = QtWidgets.QSpinBox(MIN_SCALE)
         self.scale_z_min.setMaximumWidth(50)
-        self.scale_z_max = QtWidgets.QLineEdit()
+        self.scale_z_min.setMinimum(1)
+        self.scale_z_max = QtWidgets.QSpinBox(MIN_SCALE)
         self.scale_z_max.setMaximumWidth(50)
+        self.scale_z_max.setMinimum(1)
 
-        self.scale_square_min = QtWidgets.QLineEdit()
+        self.scale_square_min = QtWidgets.QSpinBox(MIN_SCALE)
         self.scale_square_min.setMaximumWidth(50)
+        self.scale_square_min.setMinimum(1)
         self.scale_square_min.setDisabled(True)
-        self.scale_square_max = QtWidgets.QLineEdit()
+        self.scale_square_max = QtWidgets.QSpinBox(MIN_SCALE)
         self.scale_square_max.setMaximumWidth(50)
+        self.scale_square_max.setMinimum(1)
         self.scale_square_max.setDisabled(True)
 
         self.scale_square_checkbox = QtWidgets.QCheckBox()
@@ -148,7 +156,6 @@ class ScatterToolUI(QtWidgets.QDialog):
         self.source_select_button.clicked.connect(self._get_current_select_single_object)
         self.destination_select_button.clicked.connect(self._get_current_select_multi_object_vertex)
         self.scale_square_checkbox.clicked.connect(self._toggle_scale_inputs)
-        pass
 
     @QtCore.Slot()
     def _get_current_select_single_object(self):
@@ -160,7 +167,15 @@ class ScatterToolUI(QtWidgets.QDialog):
 
     @QtCore.Slot()
     def _toggle_scale_inputs(self):
-        pass
+        # flip flops between enabled and disabled
+        self.scale_x_min.setDisabled(self.scale_x_min.isEnabled())
+        self.scale_x_max.setDisabled(self.scale_x_max.isEnabled())
+        self.scale_y_min.setDisabled(self.scale_y_min.isEnabled())
+        self.scale_y_max.setDisabled(self.scale_y_max.isEnabled())
+        self.scale_z_min.setDisabled(self.scale_z_min.isEnabled())
+        self.scale_z_max.setDisabled(self.scale_z_max.isEnabled())
+        self.scale_square_min.setDisabled(self.scale_square_min.isEnabled())
+        self.scale_square_max.setDisabled(self.scale_square_max.isEnabled())
 
     @QtCore.Slot()
     def _do_scatter(self):
@@ -168,13 +183,21 @@ class ScatterToolUI(QtWidgets.QDialog):
         scatter.scatter_on_source(square_scale=self.square_tickbox.value())
 
     def _update_scatter_instance_from_fields(self):
-        scale_ranges = (float(self.scale_x_edit.text()),
-                        float(self.scale_y_edit.text()),
-                        float(self.scale_z_edit.text()))
-        rotation_ranges = (float(self.rotation_x_edit.text()),
-                           float(self.rotation_y_edit.text()),
-                           float(self.rotation_z_edit.text()))
-        source_object = str(self.source_object_edit.text())
-        destinations = self.destinations
+        scale_ranges = self._get_scale_ranges()
+        rotation_ranges = self._get_rotation_ranges()
+        source_object = str(self.source_line_edit.text())
+        destinations = str(self.destination_text_box.toPlainText())
         return ScatterInstance(source_object, destinations,
                                scale_ranges, rotation_ranges)
+
+    def _get_scale_ranges(self):
+        scale_x_range = (float(self.scale_x_min.value()), float(self.scale_x_max.value()))
+        scale_y_range = (float(self.scale_y_min.value()), float(self.scale_y_max.value()))
+        scale_z_range = (float(self.scale_z_min.value()), float(self.scale_z_max.value()))
+        return [scale_x_range, scale_y_range, scale_z_range]
+
+    def _get_rotation_ranges(self):
+        rotation_x_range = (float(self.rotation_x_min.value()), float(self.rotation_x_max.value()))
+        rotation_y_range = (float(self.rotation_y_min.value()), float(self.rotation_y_max.value()))
+        rotation_z_range = (float(self.rotation_z_min.value()), float(self.rotation_z_max.value()))
+        return [rotation_x_range, rotation_y_range, rotation_z_range]
