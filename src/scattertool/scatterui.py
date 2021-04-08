@@ -89,32 +89,32 @@ class ScatterToolUI(QtWidgets.QDialog):
 
         self.scale_x_min = QtWidgets.QSpinBox(MIN_SCALE)
         self.scale_x_min.setMaximumWidth(50)
-        self.scale_x_min.setMinimum(1)
+        self.scale_x_min.setMinimum(MIN_SCALE)
         self.scale_x_max = QtWidgets.QSpinBox(MIN_SCALE)
         self.scale_x_max.setMaximumWidth(50)
-        self.scale_x_max.setMinimum(1)
+        self.scale_x_max.setMinimum(MIN_SCALE)
 
         self.scale_y_min = QtWidgets.QSpinBox(MIN_SCALE)
         self.scale_y_min.setMaximumWidth(50)
-        self.scale_y_min.setMinimum(1)
+        self.scale_y_min.setMinimum(MIN_SCALE)
         self.scale_y_max = QtWidgets.QSpinBox(MIN_SCALE)
         self.scale_y_max.setMaximumWidth(50)
-        self.scale_y_max.setMinimum(1)
+        self.scale_y_max.setMinimum(MIN_SCALE)
 
         self.scale_z_min = QtWidgets.QSpinBox(MIN_SCALE)
         self.scale_z_min.setMaximumWidth(50)
-        self.scale_z_min.setMinimum(1)
+        self.scale_z_min.setMinimum(MIN_SCALE)
         self.scale_z_max = QtWidgets.QSpinBox(MIN_SCALE)
         self.scale_z_max.setMaximumWidth(50)
-        self.scale_z_max.setMinimum(1)
+        self.scale_z_max.setMinimum(MIN_SCALE)
 
         self.scale_square_min = QtWidgets.QSpinBox(MIN_SCALE)
         self.scale_square_min.setMaximumWidth(50)
-        self.scale_square_min.setMinimum(1)
+        self.scale_square_min.setMinimum(MIN_SCALE)
         self.scale_square_min.setDisabled(True)
         self.scale_square_max = QtWidgets.QSpinBox(MIN_SCALE)
         self.scale_square_max.setMaximumWidth(50)
-        self.scale_square_max.setMinimum(1)
+        self.scale_square_max.setMinimum(MIN_SCALE)
         self.scale_square_max.setDisabled(True)
 
         self.scale_square_checkbox = QtWidgets.QCheckBox()
@@ -140,14 +140,64 @@ class ScatterToolUI(QtWidgets.QDialog):
         scale_grid.addWidget(self.scale_square_label, 4, 0)
         scale_grid.addWidget(self.scale_square_checkbox, 4, 1)
 
-        scale_grid.addWidget(self.scale_square_label, 5, 0)
+        scale_grid.addWidget(self.scale_xyz_label, 5, 0)
         scale_grid.addWidget(self.scale_square_min, 5, 1)
         scale_grid.addWidget(self.dash_label, 5, 2)
         scale_grid.addWidget(self.scale_square_max, 5, 3)
         return scale_grid
 
     def _create_rotation_ui(self):
-        return QtWidgets.QVBoxLayout()
+        self.rotation_label = QtWidgets.QLabel("Rotation Ranges")
+        self.rotation_label.setStyleSheet("font: bold;")
+
+        self.rotation_x_label = QtWidgets.QLabel("X: ")
+        self.rotation_x_label.setStyleSheet("font: bold;")
+        self.rotation_y_label = QtWidgets.QLabel("Y: ")
+        self.rotation_y_label.setStyleSheet("font: bold;")
+        self.rotation_z_label = QtWidgets.QLabel("Z: ")
+        self.rotation_z_label.setStyleSheet("font: bold;")
+
+        self.dash_label = QtWidgets.QLabel("-")
+
+        self.rotation_x_min = QtWidgets.QSpinBox(MIN_SCALE)
+        self.rotation_x_min.setMaximumWidth(50)
+        self.rotation_x_min.setMinimum(MIN_ROTATION)
+        self.rotation_x_max = QtWidgets.QSpinBox(MIN_SCALE)
+        self.rotation_x_max.setMaximumWidth(50)
+        self.rotation_x_max.setMinimum(MIN_ROTATION)
+
+        self.rotation_y_min = QtWidgets.QSpinBox(MIN_SCALE)
+        self.rotation_y_min.setMaximumWidth(50)
+        self.rotation_y_min.setMinimum(MIN_ROTATION)
+        self.rotation_y_max = QtWidgets.QSpinBox(MIN_SCALE)
+        self.rotation_y_max.setMaximumWidth(50)
+        self.rotation_y_max.setMinimum(MIN_ROTATION)
+
+        self.rotation_z_min = QtWidgets.QSpinBox(MIN_SCALE)
+        self.rotation_z_min.setMaximumWidth(50)
+        self.rotation_z_min.setMinimum(MIN_ROTATION)
+        self.rotation_z_max = QtWidgets.QSpinBox(MIN_SCALE)
+        self.rotation_z_max.setMaximumWidth(50)
+        self.rotation_z_max.setMinimum(MIN_ROTATION)
+
+        rotation_grid = QtWidgets.QGridLayout()
+        rotation_grid.addWidget(self.rotation_label, 0, 0)
+
+        rotation_grid.addWidget(self.rotation_x_label, 1, 0)
+        rotation_grid.addWidget(self.rotation_x_min, 1, 1)
+        rotation_grid.addWidget(self.dash_label, 1, 2)
+        rotation_grid.addWidget(self.rotation_x_max, 1, 3)
+
+        rotation_grid.addWidget(self.rotation_y_label, 2, 0)
+        rotation_grid.addWidget(self.rotation_y_min, 2, 1)
+        rotation_grid.addWidget(self.dash_label, 2, 2)
+        rotation_grid.addWidget(self.rotation_y_max, 2, 3)
+
+        rotation_grid.addWidget(self.rotation_z_label, 3, 0)
+        rotation_grid.addWidget(self.rotation_z_min, 3, 1)
+        rotation_grid.addWidget(self.dash_label, 3, 2)
+        rotation_grid.addWidget(self.rotation_z_max, 3, 3)
+        return rotation_grid
 
     def _create_button_ui(self):
         return QtWidgets.QVBoxLayout()
@@ -180,7 +230,7 @@ class ScatterToolUI(QtWidgets.QDialog):
     @QtCore.Slot()
     def _do_scatter(self):
         scatter = self._create_scatter_instance_from_fields()
-        scatter.scatter_on_source(square_scale=self.square_tickbox.value())
+        scatter.scatter_on_source(square_scale=self.scale_square_checkbox.isChecked())
 
     def _update_scatter_instance_from_fields(self):
         scale_ranges = self._get_scale_ranges()
@@ -191,6 +241,9 @@ class ScatterToolUI(QtWidgets.QDialog):
                                scale_ranges, rotation_ranges)
 
     def _get_scale_ranges(self):
+        if self.scale_square_checkbox.isChecked():
+            scale_range = (float(self.scale_square_min.value()), float(self.scale_square_max.value()))
+            return [scale_range, scale_range, scale_range]
         scale_x_range = (float(self.scale_x_min.value()), float(self.scale_x_max.value()))
         scale_y_range = (float(self.scale_y_min.value()), float(self.scale_y_max.value()))
         scale_z_range = (float(self.scale_z_min.value()), float(self.scale_z_max.value()))
