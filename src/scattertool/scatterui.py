@@ -1,11 +1,15 @@
 from PySide2 import QtWidgets, QtCore
 import maya.OpenMayaUI as omui
+import maya.cmds as cmds
 from shiboken2 import wrapInstance
+import logging
 from scatter_instance import ScatterInstance
 
 MIN_SCALE = 1.0
 MIN_ROTATION = 0
 MAX_ROTATION = 360
+
+log = logging.getLogger(__name__)
 
 
 def return_maya_main_window():
@@ -21,6 +25,7 @@ class ScatterToolUI(QtWidgets.QDialog):
         self.setMinimumHeight(550)
         self.setWindowFlags(self.windowFlags() ^ QtCore.Qt.WindowContextHelpButtonHint)
 
+        self.destination_holder = []
         self._create_ui()
         self._create_connections()
 
@@ -52,10 +57,12 @@ class ScatterToolUI(QtWidgets.QDialog):
 
         self.source_line_edit = QtWidgets.QLineEdit()
         self.source_line_edit.setMinimumWidth(150)
+        self.source_line_edit.setDisabled(True)
         self.destination_text_box = QtWidgets.QTextEdit()
         self.destination_text_box.setMinimumWidth(150)
         self.destination_text_box.setMinimumHeight(50)
         self.destination_text_box.setMaximumHeight(50)
+        self.destination_text_box.setDisabled(True)
 
         self.source_select_button = QtWidgets.QPushButton("Select")
         self.source_select_button.setMaximumWidth(75)
@@ -233,6 +240,7 @@ class ScatterToolUI(QtWidgets.QDialog):
         rotation_z_layout.addWidget(self.rotation_z_max)
         rotation_z_layout.addStretch()
         rotation_layout.addLayout(rotation_z_layout)
+
         return rotation_layout
 
     def _create_connections(self):
@@ -243,11 +251,37 @@ class ScatterToolUI(QtWidgets.QDialog):
 
     @QtCore.Slot()
     def _get_current_select_single_object(self):
-        pass
+        full_selection = cmds.ls(selection=True, objectsOnly=True)
+        if len(full_selection) > 1:
+            log.warning("Only the first selection will be used for the source.")
+
+        single_selection = ""
+        try:
+            single_selection = full_selection[0]
+        except IndexError:
+            log.warning("You have nothing selected or do not have a valid object selected!")
+
+        if single_selection:
+            self.source_line_edit.setText(single_selection)
 
     @QtCore.Slot()
     def _get_current_select_multi_object_vertex(self):
-        pass
+        full_selection = cmds.ls(selection=True, flatten=True)
+        self.destination_text_box.setText(','.join(full_selection))
+        object_references = []
+        vertex_references = []
+        for selection in full_selection:
+            encoded_selection = selection.encode("utf-8")
+            if ".vtx" in encoded_selection:
+                vertex_references.append(selection)
+            else:
+                object_references.append(selection)
+
+        if object_references:
+            vertex_ranges = cmds.polyListComponentConversion(object_references, toVertex=True)
+            vertex_references.extend(cmds.filterExpand(vertex_ranges, selectionMask=31))
+
+        self.destination_holder = vertex_references
 
     @QtCore.Slot()
     def _toggle_scale_inputs(self):
@@ -270,7 +304,7 @@ class ScatterToolUI(QtWidgets.QDialog):
         scale_ranges = self._get_scale_ranges()
         rotation_ranges = self._get_rotation_ranges()
         source_object = str(self.source_line_edit.text())
-        destinations = str(self.destination_text_box.toPlainText())
+        destinations = self.destination_holder
         return ScatterInstance(source_object, destinations,
                                scale_ranges, rotation_ranges)
 

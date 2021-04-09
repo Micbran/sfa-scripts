@@ -21,9 +21,12 @@ class ScatterInstance(object):
     def scatter_on_source(self, square_scale):
         pass
 
-    def _scale_by_randoms(self, instance, square_scale):
+    def _scale_by_randoms(self, instance):
         pass
         # random.uniform()
+
+    def _square_scale(self, instance):
+        pass
 
     def _rotate_by_randoms(self, instance):
         pass
