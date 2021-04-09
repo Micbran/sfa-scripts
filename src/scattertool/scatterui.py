@@ -251,7 +251,7 @@ class ScatterToolUI(QtWidgets.QDialog):
 
     @QtCore.Slot()
     def _get_current_select_single_object(self):
-        full_selection = cmds.ls(selection=True, objectsOnly=True)
+        full_selection = cmds.ls(selection=True)
         if len(full_selection) > 1:
             log.warning("Only the first selection will be used for the source.")
 
@@ -311,7 +311,7 @@ class ScatterToolUI(QtWidgets.QDialog):
     def _get_scale_ranges(self):
         if self.scale_square_checkbox.isChecked():
             scale_range = (float(self.scale_square_min.value()), float(self.scale_square_max.value()))
-            return [scale_range, scale_range, scale_range]
+            return scale_range, scale_range, scale_range
         scale_x_range = (float(self.scale_x_min.value()), float(self.scale_x_max.value()))
         scale_y_range = (float(self.scale_y_min.value()), float(self.scale_y_max.value()))
         scale_z_range = (float(self.scale_z_min.value()), float(self.scale_z_max.value()))
