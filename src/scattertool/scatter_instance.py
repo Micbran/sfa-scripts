@@ -5,6 +5,16 @@ import random
 log = logging.getLogger(__name__)
 random.seed()
 
+# car and cdr implementations because it's funny
+
+
+def car(iterable):
+    return iterable[0]
+
+
+def cdr(iterable):
+    return iterable[1:]
+
 
 class ScatterInstance(object):
     def __init__(self,
@@ -77,3 +87,14 @@ class ScatterInstance(object):
         y_rotation = random.uniform(self.rotation_ranges[1][0], self.rotation_ranges[1][1])
         z_rotation = random.uniform(self.rotation_ranges[2][0], self.rotation_ranges[2][1])
         cmds.rotate(x_rotation, y_rotation, z_rotation, instance)
+
+    def _scale_by_randoms_lispy(self, instance):
+        # I didn't actually test this but it shouldn't logically sound.
+        # also it's just a joke, please no deduction for writing lisp functions
+        x_scale = random.uniform(car(car(self.scale_ranges)),
+                                 car(cdr(car(self.scale_ranges))))
+        y_scale = random.uniform(car(car(cdr(self.scale_ranges))),
+                                 car(cdr(car(cdr(self.scale_ranges)))))
+        z_scale = random.uniform(car(car(cdr(cdr(self.scale_ranges)))),
+                                 car(cdr(car(cdr(cdr(self.scale_ranges))))))
+        cmds.scale(x_scale, y_scale, z_scale, instance)
