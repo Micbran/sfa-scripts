@@ -89,7 +89,7 @@ class ScatterInstance(object):
         cmds.rotate(x_rotation, y_rotation, z_rotation, instance)
 
     def _scale_by_randoms_lispy(self, instance):
-        # I didn't actually test this but it shouldn't logically sound.
+        # I didn't actually test this but it should logically sound.
         # also it's just a joke, please no deduction for writing lisp functions
         x_scale = random.uniform(car(car(self.scale_ranges)),
                                  car(cdr(car(self.scale_ranges))))
