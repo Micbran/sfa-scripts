@@ -39,8 +39,23 @@ class ScatterInstance(object):
         log.info("Scatter complete.")
 
     def _error_check(self):
-        test = self.rotation_ranges
-        return ""
+        error = ""
+        error_count = 1
+        if not self.source_object:
+            error += "{0}: Source object cannot be empty.\n".format(error_count)
+            error_count += 1
+        if not self.destinations:
+            error += "{0}: Destinations cannot be empty.\n".format(error_count)
+            error_count += 1
+        if not cmds.objExists(self.source_object):
+            error += "{0}: Source object must exist.\n".format(error_count)
+            error_count += 1
+        for obj in self.destinations:
+            if not cmds.objExists(obj):
+                error += "{0}: Destination object must exist.\n".format(error_count)
+                error_count += 1
+                break
+        return error
 
     @staticmethod
     def _move_instance(instance, vertex):
