@@ -11,6 +11,13 @@ GUI:
             * Allow user to specify min and max random scale for square scale
     * Rotation UI
         * Allow user to specify minimum and maximum rotation angle along x, y and z axes (0 - 360)
+    * Percentage Scatter UI
+        * Allow user to specify how many of selected vertices to scatter to (0% -> 100%)
+    * Align to Normals Checkbox
+        * When checked, scattered objects will be aligned to normals of destination(s)
+    * Position Offset UI
+        * Allow user to specify how much to "move" the object after placement (and alignment) to normal in x, y, z axes
+            * 0-100 range for each one
 
 Scatter:
     * Create instances (not copies) of the source object
@@ -18,3 +25,5 @@ Scatter:
     * Scale objects randomly based on range in each axis.
     * Rotate objects randomly based on range in each axis.
 
+Other:
+    * Create a "dressed" scene using scatter tool with three different scattered assets

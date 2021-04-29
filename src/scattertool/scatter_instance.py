@@ -2,18 +2,10 @@ import maya.cmds as cmds
 import logging
 import random
 
+from xyz_ranges import XYZMinMaxRange
+
 log = logging.getLogger(__name__)
 random.seed()
-
-# car and cdr implementations because it's funny
-
-
-def car(iterable):
-    return iterable[0]
-
-
-def cdr(iterable):
-    return iterable[1:]
 
 
 class ScatterInstance(object):
@@ -21,31 +13,25 @@ class ScatterInstance(object):
                  source_object,
                  destinations,
                  scale_ranges=((1, 1), (1, 1), (1, 1)),
-                 rotation_ranges=((0, 0), (0, 0), (0, 0))):
-        # let's make Python look like Lisp
+                 rotation_ranges=((0, 0), (0, 0), (0, 0)),
+                 position_ranges=((0, 0), (0, 0), (0, 0)),
+                 percentage_placement=1.0):
         self.source_object = source_object
         self.destinations = destinations
-        self.scale_ranges = scale_ranges
-        self.rotation_ranges = rotation_ranges
+        # use value unpacking for easy construction from tuple
+        self.scale_ranges = XYZMinMaxRange(*scale_ranges)
+        self.rotation_ranges = XYZMinMaxRange(*rotation_ranges)
+        self.position_ranges = XYZMinMaxRange(*position_ranges)
 
-    def scatter_on_source(self, square_scale):
+        self.percentage_placement = percentage_placement
+
+    def scatter_on_source(self, option_set):
         error = self._error_check()
         if error:
             log.error("Scatter unable to run, precondition(s) not met: {0}".format(error))
             return
         self.source_object = cmds.ls(self.source_object, transforms=True)[0]
-        instance_group_name = cmds.group(empty=True, name="scatter_instance_grp#")
-        for destination in self.destinations:
-            instance_result = cmds.instance(self.source_object, name=self.source_object + "_instance#", leaf=True)[0]
-            cmds.parent(instance_result, instance_group_name)
-
-            self._move_instance(instance_result, destination)
-            if square_scale:
-                self._square_scale(instance_result)
-            else:
-                self._scale_by_randoms(instance_result)
-            self._rotate_by_randoms(instance_result)
-        cmds.xform(instance_group_name, centerPivots=True)
+        self.do_scatter(option_set)
         log.info("Scatter complete.")
 
     def _error_check(self):
@@ -67,34 +53,44 @@ class ScatterInstance(object):
                 break
         return error
 
+    def do_scatter(self, option_set):
+        instance_group_name = cmds.group(empty=True, name="scatter_instance_grp#")
+        percent_culled_destinations = self._apply_percentage_to_list(self.destinations)
+        for destination in percent_culled_destinations:
+            instance_result = cmds.instance(self.source_object, name=self.source_object + "_instance#", leaf=True)[0]
+            cmds.parent(instance_result, instance_group_name)
+
+            self._move_instance_to_vertex(instance_result, destination)
+            if option_set.get('square_scale'):
+                self._square_scale(instance_result)
+            else:
+                self._scale_by_randoms(instance_result)
+            self._rotate_by_randoms(instance_result)
+        cmds.xform(instance_group_name, centerPivots=True)
+
+    def _apply_percentage_to_list(self, input_list):
+        list_length = len(input_list)
+        sample_amount = int(round(list_length)*self.percentage_placement)
+        sampled_list = random.sample(input_list, sample_amount)
+        return sampled_list
+
     @staticmethod
-    def _move_instance(instance, vertex):
+    def _move_instance_to_vertex(instance, vertex):
         x, y, z = cmds.pointPosition(vertex)
         cmds.move(x, y, z, instance)
 
     def _scale_by_randoms(self, instance):
-        x_scale = random.uniform(self.scale_ranges[0][0], self.scale_ranges[0][1])
-        y_scale = random.uniform(self.scale_ranges[1][0], self.scale_ranges[1][1])
-        z_scale = random.uniform(self.scale_ranges[2][0], self.scale_ranges[2][1])
+        x_scale, y_scale, z_scale = self.scale_ranges.random_values_within()
         cmds.scale(x_scale, y_scale, z_scale, instance)
 
     def _square_scale(self, instance):
-        single_scale = random.uniform(self.scale_ranges[0][0], self.scale_ranges[0][1])
+        single_scale, _, _ = self.scale_ranges.random_values_within()
         cmds.scale(single_scale, single_scale, single_scale, instance)
 
     def _rotate_by_randoms(self, instance):
-        x_rotation = random.uniform(self.rotation_ranges[0][0], self.rotation_ranges[0][1])
-        y_rotation = random.uniform(self.rotation_ranges[1][0], self.rotation_ranges[1][1])
-        z_rotation = random.uniform(self.rotation_ranges[2][0], self.rotation_ranges[2][1])
+        x_rotation, y_rotation, z_rotation = self.rotation_ranges.random_values_within()
         cmds.rotate(x_rotation, y_rotation, z_rotation, instance)
 
-    def _scale_by_randoms_lispy(self, instance):
-        # I didn't actually test this but it should logically sound.
-        # also it's just a joke, please no deduction for writing lisp functions
-        x_scale = random.uniform(car(car(self.scale_ranges)),
-                                 car(cdr(car(self.scale_ranges))))
-        y_scale = random.uniform(car(car(cdr(self.scale_ranges))),
-                                 car(cdr(car(cdr(self.scale_ranges)))))
-        z_scale = random.uniform(car(car(cdr(cdr(self.scale_ranges)))),
-                                 car(cdr(car(cdr(cdr(self.scale_ranges))))))
-        cmds.scale(x_scale, y_scale, z_scale, instance)
+    def _move_by_randoms(self, instance):
+        x_move, y_move, z_move = self.position_ranges.random_values_within()
+        cmds.move(x_move, y_move, z_move, relative=True)
