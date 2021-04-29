@@ -34,6 +34,9 @@ class ScatterToolUI(QtWidgets.QDialog):
         self.selection_layout = self._create_selection_ui()
         self.scale_layout = self._create_scale_ui()
         self.rotation_layout = self._create_rotation_ui()
+        self.position_layout = self._create_position_ui()
+        self.percent_layout = self._create_scatter_percent()
+        self.options_layout = self._create_options_ui()
 
         self.title_label = QtWidgets.QLabel("Scatter Tool")
         self.title_label.setStyleSheet("font: bold 20px;")
@@ -44,6 +47,9 @@ class ScatterToolUI(QtWidgets.QDialog):
         self.main_layout.addLayout(self.selection_layout)
         self.main_layout.addLayout(self.scale_layout)
         self.main_layout.addLayout(self.rotation_layout)
+        self.main_layout.addLayout(self.position_layout)
+        self.main_layout.addLayout(self.percent_layout)
+        self.main_layout.addLayout(self.options_layout)
         self.main_layout.addStretch()
         self.main_layout.addWidget(self.scatter_button)
 
@@ -243,6 +249,21 @@ class ScatterToolUI(QtWidgets.QDialog):
 
         return rotation_layout
 
+    def _create_position_ui(self):
+        self.position_label = QtWidgets.QLabel("Position Ranges")
+        position_layout = QtWidgets.QVBoxLayout()
+        return position_layout
+
+    def _create_scatter_percent(self):
+        self.percent_label = QtWidgets.QLabel("Percent to Scatter On")
+        percent_layout = QtWidgets.QVBoxLayout()
+        return percent_layout
+
+    def _create_options_ui(self):
+        self.options_label = QtWidgets.QLabel("Options")
+        options_layout = QtWidgets.QVBoxLayout()
+        return options_layout
+
     def _create_connections(self):
         self.source_select_button.clicked.connect(self._get_current_select_single_object)
         self.destination_select_button.clicked.connect(self._get_current_select_multi_object_vertex)
@@ -298,15 +319,26 @@ class ScatterToolUI(QtWidgets.QDialog):
     @QtCore.Slot()
     def _do_scatter(self):
         scatter = self._create_scatter_instance_from_fields()
-        scatter.scatter_on_source(square_scale=self.scale_square_checkbox.isChecked())
+        option_set = self._create_options_from_fields()
+        scatter.scatter_on_source(option_set)
 
     def _create_scatter_instance_from_fields(self):
-        scale_ranges = self._get_scale_ranges()
-        rotation_ranges = self._get_rotation_ranges()
         source_object = str(self.source_line_edit.text())
         destinations = self.destination_holder
+        scale_ranges = self._get_scale_ranges()
+        rotation_ranges = self._get_rotation_ranges()
+        position_ranges = self._get_position_ranges()
+        percentage_placement = self._get_percentage_placement()
         return ScatterInstance(source_object, destinations,
-                               scale_ranges, rotation_ranges)
+                               scale_ranges, rotation_ranges, position_ranges,
+                               percentage_placement)
+
+    def _create_options_from_fields(self):
+        option_set = {
+            "square_scale": self.square_scale_checkbox.isChecked(),
+            "align_to_normals": False  # self.align_to_normals_checkbox.isChecked(),
+        }
+        return option_set
 
     def _get_scale_ranges(self):
         if self.scale_square_checkbox.isChecked():
@@ -322,3 +354,13 @@ class ScatterToolUI(QtWidgets.QDialog):
         rotation_y_range = (float(self.rotation_y_min.value()), float(self.rotation_y_max.value()))
         rotation_z_range = (float(self.rotation_z_min.value()), float(self.rotation_z_max.value()))
         return rotation_x_range, rotation_y_range, rotation_z_range
+
+    def _get_position_ranges(self):
+        position_x_range = (float(self.position_x_min.value()), float(self.position_x_max.value()))
+        position_y_range = (float(self.position_y_min.value()), float(self.position_y_max.value()))
+        position_z_range = (float(self.position_z_min.value()), float(self.position_z_max.value()))
+        return position_x_range, position_y_range, position_z_range
+
+    def _get_percentage_placement(self):
+        pass
+        return 1.0
