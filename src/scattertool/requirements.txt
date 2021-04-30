@@ -1,22 +1,22 @@
 
 GUI:
     * Selection UI
-        * Allow user to select a polygon object (source object)
-        * Allow user to select a polygon object and/or vertices to scatter to (destination)
+        * Allow user to select a polygon object (source object) -- 1
+        * Allow user to select a polygon object and/or vertices to scatter to (destination) -- 1
     * Scale UI
         * Individual Setting
-            * Allow user to specify minimum and maximum random scale in x, y and z axes (1.0 - inf)
+            * Allow user to specify minimum and maximum random scale in x, y and z axes (1.0 - inf) -- 1
         * Square Setting
-            * Allow user to specify "square" scale, which scales each axis by the same random amount
-            * Allow user to specify min and max random scale for square scale
+            * Allow user to specify "square" scale, which scales each axis by the same random amount -- 1
+            * Allow user to specify min and max random scale for square scale -- 1
     * Rotation UI
-        * Allow user to specify minimum and maximum rotation angle along x, y and z axes (0 - 360)
+        * Allow user to specify minimum and maximum rotation angle along x, y and z axes (0 - 360) -- 1
     * Percentage Scatter UI
-        * Allow user to specify how many of selected vertices to scatter to (0% -> 100%)
+        * Allow user to specify how many of selected vertices to scatter to (0% -> 100%) -- 1/2
     * Align to Normals Checkbox
-        * When checked, scattered objects will be aligned to normals of destination(s)
+        * When checked, scattered objects will be aligned to normals of destination(s) -- 0
     * Position Offset UI
-        * Allow user to specify how much to "move" the object after placement (and alignment) to normal in x, y, z axes
+        * Allow user to specify how much to "move" the object after placement (and alignment) to normal in x, y, z axes -- 1
             * 0-100 range for each one
 
 Scatter:
@@ -24,6 +24,9 @@ Scatter:
     * Move instances to vertices on destination object AND to all selected vertices
     * Scale objects randomly based on range in each axis.
     * Rotate objects randomly based on range in each axis.
+    * Move objects randomly based on range in each axis.
+    * Scatter only X%.
+    * Align to normals if checked.
 
 Other:
     * Create a "dressed" scene using scatter tool with three different scattered assets

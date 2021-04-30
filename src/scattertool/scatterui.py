@@ -7,6 +7,7 @@ from scatter_instance import ScatterInstance
 
 MIN_SCALE = 1.0
 MIN_ROTATION = 0
+MIN_POSITION = 0
 MAX_ROTATION = 360
 
 log = logging.getLogger(__name__)
@@ -251,7 +252,63 @@ class ScatterToolUI(QtWidgets.QDialog):
 
     def _create_position_ui(self):
         self.position_label = QtWidgets.QLabel("Position Ranges")
+        self.position_label.setStyleSheet("font: bold;")
+
+        self.position_x_label = QtWidgets.QLabel("X: ")
+        self.position_x_label.setStyleSheet("font: bold;")
+        self.position_y_label = QtWidgets.QLabel("Y: ")
+        self.position_y_label.setStyleSheet("font: bold;")
+        self.position_z_label = QtWidgets.QLabel("Z: ")
+        self.position_z_label.setStyleSheet("font: bold;")
+
+        self.position_x_min = QtWidgets.QDoubleSpinBox()
+        self.position_x_min.setMinimumWidth(60)
+        self.position_x_min.setRange(MIN_POSITION, 100)
+        self.position_x_max = QtWidgets.QDoubleSpinBox()
+        self.position_x_max.setMinimumWidth(60)
+        self.position_x_max.setRange(MIN_POSITION, 100)
+
+        self.position_y_min = QtWidgets.QDoubleSpinBox()
+        self.position_y_min.setMinimumWidth(60)
+        self.position_y_min.setRange(MIN_POSITION, 100)
+        self.position_y_max = QtWidgets.QDoubleSpinBox()
+        self.position_y_max.setMinimumWidth(60)
+        self.position_y_max.setRange(MIN_POSITION, 100)
+
+        self.position_z_min = QtWidgets.QDoubleSpinBox()
+        self.position_z_min.setMinimumWidth(60)
+        self.position_z_min.setRange(MIN_POSITION, 100)
+        self.position_z_max = QtWidgets.QDoubleSpinBox()
+        self.position_z_max.setMinimumWidth(60)
+        self.position_z_max.setRange(MIN_POSITION, 100)
+
         position_layout = QtWidgets.QVBoxLayout()
+        position_layout.addWidget(self.position_label)
+
+        position_x_layout = QtWidgets.QHBoxLayout()
+        position_x_layout.addWidget(self.position_x_label)
+        position_x_layout.addWidget(self.position_x_min)
+        position_x_layout.addWidget(QtWidgets.QLabel("-"))
+        position_x_layout.addWidget(self.position_x_max)
+        position_x_layout.addStretch()
+        position_layout.addLayout(position_x_layout)
+
+        position_y_layout = QtWidgets.QHBoxLayout()
+        position_y_layout.addWidget(self.position_y_label)
+        position_y_layout.addWidget(self.position_y_min)
+        position_y_layout.addWidget(QtWidgets.QLabel("-"))
+        position_y_layout.addWidget(self.position_y_max)
+        position_y_layout.addStretch()
+        position_layout.addLayout(position_y_layout)
+
+        position_z_layout = QtWidgets.QHBoxLayout()
+        position_z_layout.addWidget(self.position_z_label)
+        position_z_layout.addWidget(self.position_z_min)
+        position_z_layout.addWidget(QtWidgets.QLabel("-"))
+        position_z_layout.addWidget(self.position_z_max)
+        position_z_layout.addStretch()
+        position_layout.addLayout(position_z_layout)
+
         return position_layout
 
     def _create_scatter_percent(self):

@@ -80,17 +80,17 @@ class ScatterInstance(object):
         cmds.move(x, y, z, instance)
 
     def _scale_by_randoms(self, instance):
-        x_scale, y_scale, z_scale = self.scale_ranges.random_values_within()
+        x_scale, y_scale, z_scale = self.scale_ranges.random_values_within_ranges()
         cmds.scale(x_scale, y_scale, z_scale, instance)
 
     def _square_scale(self, instance):
-        single_scale, _, _ = self.scale_ranges.random_values_within()
+        single_scale, _, _ = self.scale_ranges.random_values_within_ranges()
         cmds.scale(single_scale, single_scale, single_scale, instance)
 
     def _rotate_by_randoms(self, instance):
-        x_rotation, y_rotation, z_rotation = self.rotation_ranges.random_values_within()
-        cmds.rotate(x_rotation, y_rotation, z_rotation, instance)
+        x_rotation, y_rotation, z_rotation = self.rotation_ranges.random_values_within_ranges()
+        cmds.rotate(x_rotation, y_rotation, z_rotation, instance, relative=True)
 
     def _move_by_randoms(self, instance):
-        x_move, y_move, z_move = self.position_ranges.random_values_within()
-        cmds.move(x_move, y_move, z_move, relative=True)
+        x_move, y_move, z_move = self.position_ranges.random_values_within_ranges()
+        cmds.move(x_move, y_move, z_move, instance, relative=True)

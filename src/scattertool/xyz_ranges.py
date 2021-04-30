@@ -86,7 +86,7 @@ class XYZMinMaxRange(object):
             return self._z_min_max_range
         raise TypeError
 
-    def random_values_within(self):
+    def random_values_within_ranges(self):
         x_rand = self._x_min_max_range.random_value_within()
         y_rand = self._y_min_max_range.random_value_within()
         z_rand = self._z_min_max_range.random_value_within()
