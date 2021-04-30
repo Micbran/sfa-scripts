@@ -335,7 +335,21 @@ class ScatterToolUI(QtWidgets.QDialog):
 
     def _create_options_ui(self):
         self.options_label = QtWidgets.QLabel("Options")
+        self.options_label.setStyleSheet("font: bold;")
+
+        self.align_to_normals_label = QtWidgets.QLabel("Square Scale: ")
+        self.align_to_normals_label.setStyleSheet("font: bold;")
+        self.align_to_normals_checkbox = QtWidgets.QCheckBox()
+
         options_layout = QtWidgets.QVBoxLayout()
+        options_layout.addWidget(self.options_label)
+
+        align_to_normals_layout = QtWidgets.QHBoxLayout()
+        align_to_normals_layout.addWidget(self.align_to_normals_label)
+        align_to_normals_layout.addWidget(self.align_to_normals_checkbox)
+        align_to_normals_layout.addStretch()
+        options_layout.addLayout(align_to_normals_layout)
+
         return options_layout
 
     def _create_connections(self):
@@ -410,7 +424,7 @@ class ScatterToolUI(QtWidgets.QDialog):
     def _create_options_from_fields(self):
         option_set = {
             "square_scale": self.square_scale_checkbox.isChecked(),
-            "align_to_normals": False  # self.align_to_normals_checkbox.isChecked(),
+            "align_to_normals": self.align_to_normals_checkbox.isChecked(),
         }
         return option_set
 

@@ -61,11 +61,14 @@ class ScatterInstance(object):
             cmds.parent(instance_result, instance_group_name)
 
             self._move_instance_to_vertex(instance_result, destination)
+            if option_set.get('align_to_normals'):
+                self._align_to_normals(destination, instance_result)
             if option_set.get('square_scale'):
                 self._square_scale(instance_result)
             else:
                 self._scale_by_randoms(instance_result)
             self._rotate_by_randoms(instance_result)
+            self._move_by_randoms(instance_result)
         cmds.xform(instance_group_name, centerPivots=True)
 
     def _apply_percentage_to_list(self, input_list):
@@ -73,6 +76,9 @@ class ScatterInstance(object):
         sample_amount = int(round(list_length)*self.percentage_placement)
         sampled_list = random.sample(input_list, sample_amount)
         return sampled_list
+
+    def _align_to_normals(self, destination, instance):
+        pass
 
     @staticmethod
     def _move_instance_to_vertex(instance, vertex):

@@ -45,13 +45,13 @@ class MinMaxRange(ValueRange):
         return self._max
 
     def as_tuple(self):
-        return self._min, self._max
+        return self.min, self.max
 
     def as_range(self):
-        return range(self._min, self._max)
+        return range(self.min, self.max)
 
     def random_value_within(self):
-        return random.uniform(self._min, self._max)
+        return random.uniform(self.min, self.max)
 
 
 class XYZMinMaxRange(object):
