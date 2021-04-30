@@ -339,18 +339,18 @@ class ScatterToolUI(QtWidgets.QDialog):
         self.options_label = QtWidgets.QLabel("Options")
         self.options_label.setStyleSheet("font: bold;")
 
-        self.align_to_normals_label = QtWidgets.QLabel("Align to Normals: ")
-        self.align_to_normals_label.setStyleSheet("font: bold;")
-        self.align_to_normals_checkbox = QtWidgets.QCheckBox()
+        self.constrain_to_normals_label = QtWidgets.QLabel("Constrain to Normals: ")
+        self.constrain_to_normals_label.setStyleSheet("font: bold;")
+        self.constrain_to_normals_checkbox = QtWidgets.QCheckBox()
 
         options_layout = QtWidgets.QVBoxLayout()
         options_layout.addWidget(self.options_label)
 
-        align_to_normals_layout = QtWidgets.QHBoxLayout()
-        align_to_normals_layout.addWidget(self.align_to_normals_label)
-        align_to_normals_layout.addWidget(self.align_to_normals_checkbox)
-        align_to_normals_layout.addStretch()
-        options_layout.addLayout(align_to_normals_layout)
+        constrain_to_normals_layout = QtWidgets.QHBoxLayout()
+        constrain_to_normals_layout.addWidget(self.constrain_to_normals_label)
+        constrain_to_normals_layout.addWidget(self.constrain_to_normals_checkbox)
+        constrain_to_normals_layout.addStretch()
+        options_layout.addLayout(constrain_to_normals_layout)
 
         return options_layout
 
@@ -426,7 +426,7 @@ class ScatterToolUI(QtWidgets.QDialog):
     def _create_options_from_fields(self):
         option_set = {
             "square_scale": self.scale_square_checkbox.isChecked(),
-            "align_to_normals": self.align_to_normals_checkbox.isChecked(),
+            "constrain_to_normals": self.constrain_to_normals_checkbox.isChecked(),
         }
         return option_set
 

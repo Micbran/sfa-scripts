@@ -61,7 +61,7 @@ class ScatterInstance(object):
             cmds.parent(instance_result, instance_group_name)
 
             self._move_instance_to_vertex(instance_result, destination)
-            if option_set.get('align_to_normals'):
+            if option_set.get('constrain_to_normals'):
                 self._align_to_normals(destination, instance_result)
             if option_set.get('square_scale'):
                 self._square_scale(instance_result)
@@ -77,8 +77,9 @@ class ScatterInstance(object):
         sampled_list = random.sample(input_list, sample_amount)
         return sampled_list
 
-    def _align_to_normals(self, destination, instance):
-        pass
+    @staticmethod
+    def _align_to_normals(destination, instance):
+        cmds.normalConstraint([destination], instance, aimVector=[0, 1.0, 0])
 
     @staticmethod
     def _move_instance_to_vertex(instance, vertex):
