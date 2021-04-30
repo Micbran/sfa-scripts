@@ -2,8 +2,11 @@ from PySide2 import QtWidgets, QtCore
 import maya.OpenMayaUI as omui
 import maya.cmds as cmds
 from shiboken2 import wrapInstance
+
 import logging
+
 from scatter_instance import ScatterInstance
+from qtextensions import PercentQDoubleSpinBox
 
 MIN_SCALE = 1.0
 MIN_ROTATION = 0
@@ -313,7 +316,21 @@ class ScatterToolUI(QtWidgets.QDialog):
 
     def _create_scatter_percent(self):
         self.percent_label = QtWidgets.QLabel("Percent to Scatter On")
+        self.percent_label.setStyleSheet("font: bold;")
+
+        self.percent_db_spinbox = PercentQDoubleSpinBox()
+        self.percent_db_spinbox.setMinimumWidth(60)
+        self.percent_db_spinbox.setRange(0, 100)
+        self.percent_db_spinbox.setValue(100)
+
         percent_layout = QtWidgets.QVBoxLayout()
+        percent_layout.addWidget(self.percent_label)
+
+        percent_spinbox_layout = QtWidgets.QHBoxLayout()
+        percent_spinbox_layout.addWidget(self.percent_db_spinbox)
+        percent_spinbox_layout.addStretch()
+        percent_layout.addLayout(percent_spinbox_layout)
+
         return percent_layout
 
     def _create_options_ui(self):
@@ -419,5 +436,6 @@ class ScatterToolUI(QtWidgets.QDialog):
         return position_x_range, position_y_range, position_z_range
 
     def _get_percentage_placement(self):
-        pass
-        return 1.0
+        percent_val = self.percent_db_spinbox.value()
+        log.info(percent_val, percent_val/100)
+        return percent_val/100
