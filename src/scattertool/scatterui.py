@@ -9,9 +9,11 @@ from scatter_instance import ScatterInstance
 from qtextensions import PercentQDoubleSpinBox
 
 MIN_SCALE = 1.0
+MAX_SCALE = 100
 MIN_ROTATION = 0
-MIN_POSITION = 0
 MAX_ROTATION = 360
+MIN_POSITION = -100
+MAX_POSITION = 100
 
 log = logging.getLogger(__name__)
 
@@ -24,9 +26,9 @@ def return_maya_main_window():
 class ScatterToolUI(QtWidgets.QDialog):
     def __init__(self):
         super(ScatterToolUI, self).__init__(parent=return_maya_main_window())
-        self.setWindowTitle("Scatter Tool I")
+        self.setWindowTitle("Scatter Tool II")
         self.setMinimumWidth(500)
-        self.setMinimumHeight(550)
+        self.setMinimumHeight(750)
         self.setWindowFlags(self.windowFlags() ^ QtCore.Qt.WindowContextHelpButtonHint)
 
         self.destination_holder = []
@@ -117,32 +119,32 @@ class ScatterToolUI(QtWidgets.QDialog):
 
         self.scale_x_min = QtWidgets.QDoubleSpinBox()
         self.scale_x_min.setMinimumWidth(60)
-        self.scale_x_min.setMinimum(MIN_SCALE)
+        self.scale_x_min.setRange(MIN_SCALE, MAX_SCALE)
         self.scale_x_max = QtWidgets.QDoubleSpinBox()
         self.scale_x_max.setMinimumWidth(60)
-        self.scale_x_max.setMinimum(MIN_SCALE)
+        self.scale_x_max.setRange(MIN_SCALE, MAX_SCALE)
 
         self.scale_y_min = QtWidgets.QDoubleSpinBox()
         self.scale_y_min.setMinimumWidth(60)
-        self.scale_y_min.setMinimum(MIN_SCALE)
+        self.scale_y_min.setRange(MIN_SCALE, MAX_SCALE)
         self.scale_y_max = QtWidgets.QDoubleSpinBox()
         self.scale_y_max.setMinimumWidth(60)
-        self.scale_y_max.setMinimum(MIN_SCALE)
+        self.scale_y_max.setRange(MIN_SCALE, MAX_SCALE)
 
         self.scale_z_min = QtWidgets.QDoubleSpinBox()
         self.scale_z_min.setMinimumWidth(60)
-        self.scale_z_min.setMinimum(MIN_SCALE)
+        self.scale_z_min.setRange(MIN_SCALE, MAX_SCALE)
         self.scale_z_max = QtWidgets.QDoubleSpinBox()
         self.scale_z_max.setMinimumWidth(60)
-        self.scale_z_max.setMinimum(MIN_SCALE)
+        self.scale_z_max.setRange(MIN_SCALE, MAX_SCALE)
 
         self.scale_square_min = QtWidgets.QDoubleSpinBox()
         self.scale_square_min.setMinimumWidth(60)
-        self.scale_square_min.setMinimum(MIN_SCALE)
+        self.scale_square_min.setRange(MIN_SCALE, MAX_SCALE)
         self.scale_square_min.setDisabled(True)
         self.scale_square_max = QtWidgets.QDoubleSpinBox()
         self.scale_square_max.setMinimumWidth(60)
-        self.scale_square_max.setMinimum(MIN_SCALE)
+        self.scale_square_max.setRange(MIN_SCALE, MAX_SCALE)
         self.scale_square_max.setDisabled(True)
 
         self.scale_square_checkbox = QtWidgets.QCheckBox()
@@ -205,24 +207,24 @@ class ScatterToolUI(QtWidgets.QDialog):
 
         self.rotation_x_min = QtWidgets.QDoubleSpinBox()
         self.rotation_x_min.setMinimumWidth(60)
-        self.rotation_x_min.setRange(MIN_ROTATION, 360)
+        self.rotation_x_min.setRange(MIN_ROTATION, MAX_ROTATION)
         self.rotation_x_max = QtWidgets.QDoubleSpinBox()
         self.rotation_x_max.setMinimumWidth(60)
-        self.rotation_x_max.setRange(MIN_ROTATION, 360)
+        self.rotation_x_max.setRange(MIN_ROTATION, MAX_ROTATION)
 
         self.rotation_y_min = QtWidgets.QDoubleSpinBox()
         self.rotation_y_min.setMinimumWidth(60)
-        self.rotation_y_min.setRange(MIN_ROTATION, 360)
+        self.rotation_y_min.setRange(MIN_ROTATION, MAX_ROTATION)
         self.rotation_y_max = QtWidgets.QDoubleSpinBox()
         self.rotation_y_max.setMinimumWidth(60)
-        self.rotation_y_max.setRange(MIN_ROTATION, 360)
+        self.rotation_y_max.setRange(MIN_ROTATION, MAX_ROTATION)
 
         self.rotation_z_min = QtWidgets.QDoubleSpinBox()
         self.rotation_z_min.setMinimumWidth(60)
-        self.rotation_z_min.setRange(MIN_ROTATION, 360)
+        self.rotation_z_min.setRange(MIN_ROTATION, MAX_ROTATION)
         self.rotation_z_max = QtWidgets.QDoubleSpinBox()
         self.rotation_z_max.setMinimumWidth(60)
-        self.rotation_z_max.setRange(MIN_ROTATION, 360)
+        self.rotation_z_max.setRange(MIN_ROTATION, MAX_ROTATION)
 
         rotation_layout = QtWidgets.QVBoxLayout()
         rotation_layout.addWidget(self.rotation_label)
@@ -266,24 +268,24 @@ class ScatterToolUI(QtWidgets.QDialog):
 
         self.position_x_min = QtWidgets.QDoubleSpinBox()
         self.position_x_min.setMinimumWidth(60)
-        self.position_x_min.setRange(MIN_POSITION, 100)
+        self.position_x_min.setRange(MIN_POSITION, MAX_POSITION)
         self.position_x_max = QtWidgets.QDoubleSpinBox()
         self.position_x_max.setMinimumWidth(60)
-        self.position_x_max.setRange(MIN_POSITION, 100)
+        self.position_x_max.setRange(MIN_POSITION, MAX_POSITION)
 
         self.position_y_min = QtWidgets.QDoubleSpinBox()
         self.position_y_min.setMinimumWidth(60)
-        self.position_y_min.setRange(MIN_POSITION, 100)
+        self.position_y_min.setRange(MIN_POSITION, MAX_POSITION)
         self.position_y_max = QtWidgets.QDoubleSpinBox()
         self.position_y_max.setMinimumWidth(60)
-        self.position_y_max.setRange(MIN_POSITION, 100)
+        self.position_y_max.setRange(MIN_POSITION, MAX_POSITION)
 
         self.position_z_min = QtWidgets.QDoubleSpinBox()
         self.position_z_min.setMinimumWidth(60)
-        self.position_z_min.setRange(MIN_POSITION, 100)
+        self.position_z_min.setRange(MIN_POSITION, MAX_POSITION)
         self.position_z_max = QtWidgets.QDoubleSpinBox()
         self.position_z_max.setMinimumWidth(60)
-        self.position_z_max.setRange(MIN_POSITION, 100)
+        self.position_z_max.setRange(MIN_POSITION, MAX_POSITION)
 
         position_layout = QtWidgets.QVBoxLayout()
         position_layout.addWidget(self.position_label)
@@ -337,7 +339,7 @@ class ScatterToolUI(QtWidgets.QDialog):
         self.options_label = QtWidgets.QLabel("Options")
         self.options_label.setStyleSheet("font: bold;")
 
-        self.align_to_normals_label = QtWidgets.QLabel("Square Scale: ")
+        self.align_to_normals_label = QtWidgets.QLabel("Align to Normals: ")
         self.align_to_normals_label.setStyleSheet("font: bold;")
         self.align_to_normals_checkbox = QtWidgets.QCheckBox()
 
@@ -423,7 +425,7 @@ class ScatterToolUI(QtWidgets.QDialog):
 
     def _create_options_from_fields(self):
         option_set = {
-            "square_scale": self.square_scale_checkbox.isChecked(),
+            "square_scale": self.scale_square_checkbox.isChecked(),
             "align_to_normals": self.align_to_normals_checkbox.isChecked(),
         }
         return option_set
@@ -451,5 +453,4 @@ class ScatterToolUI(QtWidgets.QDialog):
 
     def _get_percentage_placement(self):
         percent_val = self.percent_db_spinbox.value()
-        log.info(percent_val, percent_val/100)
         return percent_val/100
